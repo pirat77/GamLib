@@ -17,17 +17,20 @@ public class Platform {
     private float memory;
     @Column(name = "internal_storage")
     private float internalStorage;
+    @Column(name = "platform_logo")
+    private String platformLogo;
 
     @ManyToMany
     private List<Game> games;
 
-    public Platform(String name, String cpuName, String gpuName,
-                    float memory, float internalStorage, List<Game> games) {
+    public Platform(String name, String cpuName, String gpuName, float memory,
+                    float internalStorage, String platformLogo, List<Game> games) {
         this.name = name;
         this.cpuName = cpuName;
         this.gpuName = gpuName;
         this.memory = memory;
         this.internalStorage = internalStorage;
+        this.platformLogo = platformLogo;
         this.games = games;
     }
 
@@ -53,6 +56,10 @@ public class Platform {
 
     public float getInternalStorage() {
         return internalStorage;
+    }
+
+    public String getPlatformLogo() {
+        return platformLogo;
     }
 
     public List<Game> getGames() {
