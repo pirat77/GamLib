@@ -8,37 +8,21 @@ import javax.persistence.*;
 import java.util.Date;
 import java.util.List;
 
-@JsonIgnoreProperties(ignoreUnknown = true, value = {"platforms"})
+@JsonIgnoreProperties(ignoreUnknown = true)
 @Entity(name = "game")
-@NamedQueries({
-        @NamedQuery(    name="Game.getAll",
-                        query="SELECT g FROM game g"),
-        @NamedQuery(    name="Game.getByGenre",
-                        query="SELECT g FROM game g WHERE g.genre = :genre")
-})
 public class Game {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
-    @Column(name = "title")
     private String title;
-
     @Column(name = "released_date")
     private Date releasedDate;
-
     @Enumerated
-    @Column(name = "genre")
     private Genre genre;
-
     @Column(name = "game_logo")
     private String gameLogo;
-
-    @Column(name = "rating")
     private float rating;
-
-    @Column(name = "description")
     private String description;
 
     @ManyToOne

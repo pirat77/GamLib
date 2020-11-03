@@ -6,23 +6,17 @@ import javax.persistence.*;
 import java.util.Date;
 import java.util.List;
 
-@JsonIgnoreProperties(ignoreUnknown = true, value = {"studios"})
+@JsonIgnoreProperties(ignoreUnknown = true, value = {"game"})
 @Entity
 public class Studio {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
-    @Column(name = "name")
     private String name;
-
     @Column(name = "found_date")
     private Date foundDate;
-
-    @Column(name = "country")
     private String country;
-
     @Column(name = "studio_logo")
     private String studioLogo;
 

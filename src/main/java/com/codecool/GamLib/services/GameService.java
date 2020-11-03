@@ -12,11 +12,11 @@ public class GameService {
     private static GameRepository gameRepository;
 
     public String getALLResponse(){
-        String output = "{\"games\": ";
+        String output = "{\"games\": [";
         for (Game g: gameRepository.findAll()){
-            output += (g + ", ");
+            output += (g.JSONrepresentation() + ", ");
         }
-        output += "}";
+        output += "]}";
         return output;
     }
 }
