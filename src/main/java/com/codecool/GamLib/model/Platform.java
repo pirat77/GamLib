@@ -15,8 +15,8 @@ public class Platform {
     private String name;
     @Column(name = "cpu_name")
     private String cpuName;
-    @Column(name = "gpu_name")
-    private String gpuName;
+    @Column(name = "cpu_clock_speed")
+    private Float cpuClockSpeed;
     private float memory;
     @Column(name = "internal_storage")
     private float internalStorage;
@@ -30,11 +30,11 @@ public class Platform {
         super();
     }
 
-    public Platform(String name, String cpuName, String gpuName, float memory,
+    public Platform(String name, String cpuName, Float cpuClockSpeed, float memory,
                     float internalStorage, String platformLogo, List<Game> games) {
         this.name = name;
         this.cpuName = cpuName;
-        this.gpuName = gpuName;
+        this.cpuClockSpeed = cpuClockSpeed;
         this.memory = memory;
         this.internalStorage = internalStorage;
         this.platformLogo = platformLogo;
@@ -53,8 +53,8 @@ public class Platform {
         return cpuName;
     }
 
-    public String getGpuName() {
-        return gpuName;
+    public Float getCpuClockSpeed() {
+        return cpuClockSpeed;
     }
 
     public float getMemory() {
