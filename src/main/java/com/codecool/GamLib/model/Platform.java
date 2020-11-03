@@ -6,7 +6,7 @@ import javax.persistence.*;
 import java.util.List;
 
 @JsonIgnoreProperties(ignoreUnknown = true, value = {"games"})
-@Entity(name = "platform")
+@Entity
 public class Platform {
 
     @Id
@@ -16,7 +16,7 @@ public class Platform {
     @Column(name = "cpu_name")
     private String cpuName;
     @Column(name = "cpu_clock_speed")
-    private float cpuClockSpeed;
+    private Float cpuClockSpeed;
     private float memory;
     @Column(name = "internal_storage")
     private float internalStorage;
@@ -30,7 +30,7 @@ public class Platform {
         super();
     }
 
-    public Platform(String name, String cpuName, float cpuClockSpeed, float memory,
+    public Platform(String name, String cpuName, Float cpuClockSpeed, float memory,
                     float internalStorage, String platformLogo, List<Game> games) {
         this.name = name;
         this.cpuName = cpuName;
@@ -53,7 +53,9 @@ public class Platform {
         return cpuName;
     }
 
-    public float getCpuClockSpeed() { return cpuClockSpeed; }
+    public Float getCpuClockSpeed() {
+        return cpuClockSpeed;
+    }
 
     public float getMemory() {
         return memory;
