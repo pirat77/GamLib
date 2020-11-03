@@ -1,22 +1,36 @@
-package com.codecool.GamLib.entities;
+package com.codecool.GamLib.model;
+
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import javax.persistence.*;
 import java.util.Date;
 import java.util.List;
 
-@Entity
+@JsonIgnoreProperties(ignoreUnknown = true, value = {"games"})
+@Entity(name = "game")
 public class Game {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @Column(name = "title")
     private String title;
+
     @Column(name = "released_date")
     private Date releasedDate;
-    private String genre;
+
+    @Enumerated
+    @Column(name = "genre")
+    private Genre genre;
+
     @Column(name = "game_logo")
     private String gameLogo;
+
+    @Column(name = "rating")
     private float rating;
+
+    @Column(name = "description")
     private String description;
 
     @ManyToOne
@@ -25,7 +39,11 @@ public class Game {
     @ManyToMany
     private List<Platform> platforms;
 
-    public Game(String title, Date releasedDate, String genre, String gameLogo,
+    public Game(){
+        super();
+    }
+
+    public Game(String title, Date releasedDate, Genre genre, String gameLogo,
                 float rating, String description, Studio studio, List<Platform> platforms) {
         this.title = title;
         this.releasedDate = releasedDate;
@@ -49,7 +67,7 @@ public class Game {
         return releasedDate;
     }
 
-    public String getGenre() {
+    public Genre getGenre() {
         return genre;
     }
 

@@ -1,1 +1,10 @@
+com/codecool/GamLib/model/Platform.class
+com/codecool/GamLib/controllers/GameController.class
+com/codecool/GamLib/controllers/GameRequest$GameRequestBuilder.class
+com/codecool/GamLib/model/Genre.class
+com/codecool/GamLib/model/Game.class
 com/codecool/GamLib/GamLibApplication.class
+com/codecool/GamLib/controllers/GameRequest.class
+com/codecool/GamLib/repositories/GameRepository.class
+com/codecool/GamLib/model/Studio.class
+com/codecool/GamLib/services/GameService.class
