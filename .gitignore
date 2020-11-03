@@ -27,3 +27,5 @@ hs_err_pid*
 *.iml
 .gitignore
 src/main/resources/application.properties
+target/
+pid.file
