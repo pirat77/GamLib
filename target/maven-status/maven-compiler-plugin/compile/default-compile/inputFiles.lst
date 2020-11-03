@@ -5,4 +5,5 @@
 /home/janio/java/GamLib/src/main/java/com/codecool/GamLib/model/Game.java
 /home/janio/java/GamLib/src/main/java/com/codecool/GamLib/GamLibApplication.java
 /home/janio/java/GamLib/src/main/java/com/codecool/GamLib/repositories/GameRepository.java
-/home/janio/java/GamLib/src/main/java/com/codecool/GamLib/controllers/GetGameRequest.java
+/home/janio/java/GamLib/src/main/java/com/codecool/GamLib/services/GameService.java
+/home/janio/java/GamLib/src/main/java/com/codecool/GamLib/controllers/GameRequest.java
