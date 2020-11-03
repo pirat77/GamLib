@@ -7,7 +7,7 @@ import java.util.Date;
 import java.util.List;
 
 @JsonIgnoreProperties(ignoreUnknown = true, value = {"game"})
-@Entity
+@Entity(name = "studio")
 public class Studio {
 
     @Id

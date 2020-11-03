@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
 public class GameService {
 
     @Autowired
-    private static GameRepository gameRepository;
+    private GameRepository gameRepository;
 
     public String getALLResponse(){
         String output = "{\"games\": [";

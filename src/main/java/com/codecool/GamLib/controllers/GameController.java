@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.*;
 public class GameController {
 
     @Autowired
-    private static GameService gameService;
+    private GameService gameService;
 
     @GetMapping(value = "/Game")
     public String getGame(@RequestBody GameRequest request){
