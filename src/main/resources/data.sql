@@ -1,4 +1,7 @@
-INSERT INTO studio (name, found_date, country, studio_logo) values ('Konami', '1969-03-21', 'Japan', 'images/Konami.png');
+INSERT INTO studio (name, found_date, country, studio_logo) values
+('Konami', '1969-03-21', 'Japan', 'images/Konami.png'),
+('Capcopm', '1979-05-30', 'Japan', 'images/Kapkom.png'),
+('Sony Interactive Entertainment', '1993-11-16', 'Japan', 'images/SIE.png');
 
 INSERT INTO platform (name, cpu_name, cpu_clock_speed, memory, internal_storage, platform_logo) values
 ('Playstation', 'R3000', 33.8688, 3, 0, 'console_logo/playstation.img'),
