@@ -1,15 +1,18 @@
 package com.codecool.GamLib.controllers;
 
+import com.codecool.GamLib.services.GameService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 public class GameController {
 
+    @Autowired
+    private static GameService gameService;
+
     @GetMapping(value = "/Game")
     public String getGame(@RequestBody GameRequest request){
-        String output = "";
-
-        return output;
+        return gameService.getALLResponse();
     }
 
     @DeleteMapping("/Game")

@@ -1,13 +1,21 @@
 package com.codecool.GamLib.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import javax.persistence.*;
 import java.util.Date;
 import java.util.List;
 
-@JsonIgnoreProperties(ignoreUnknown = true, value = {"games"})
+@JsonIgnoreProperties(ignoreUnknown = true, value = {"platforms"})
 @Entity(name = "game")
+@NamedQueries({
+        @NamedQuery(    name="Game.getAll",
+                        query="SELECT g FROM game g"),
+        @NamedQuery(    name="Game.getByGenre",
+                        query="SELECT g FROM game g WHERE g.genre = :genre")
+})
 public class Game {
 
     @Id
@@ -53,6 +61,17 @@ public class Game {
         this.description = description;
         this.studio = studio;
         this.platforms = platforms;
+    }
+
+    public String JSONrepresentation() {
+        ObjectMapper mapper = new ObjectMapper();
+        String jsonOutput = "";
+        try {
+            jsonOutput = mapper.writeValueAsString(this);
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
+        return jsonOutput;
     }
 
     public Long getId() {
