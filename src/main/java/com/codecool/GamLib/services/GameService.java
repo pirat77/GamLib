@@ -14,7 +14,7 @@ public class GameService {
     public String getALLResponse(){
         String output = "{\"games\": [";
         for (Game g: gameRepository.findAll()){
-            output += (g.JSONrepresentation() + ", ");
+            output += (g.jsonRepresentation() + ", ");
         }
         output += "]}";
         return output;

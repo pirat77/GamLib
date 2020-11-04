@@ -1,5 +1,6 @@
 package com.codecool.GamLib.model;
 
+import com.codecool.GamLib.services.JsonMapper;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import javax.persistence.*;
@@ -23,6 +24,9 @@ public class Studio {
     @OneToMany(mappedBy = "studio", fetch = FetchType.LAZY)
     private List<Game> game;
 
+    @Transient
+    private JsonMapper jsonMapper;
+
     public Studio(){
         super();
     }
@@ -33,6 +37,10 @@ public class Studio {
         this.country = country;
         this.studioLogo = studioLogo;
         this.game = game;
+    }
+
+    public String jsonRepresentation() {
+        return jsonMapper.jsonRepresentation(this);
     }
 
     public Long getId() {

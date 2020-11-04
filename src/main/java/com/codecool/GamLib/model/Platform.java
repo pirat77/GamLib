@@ -1,5 +1,6 @@
 package com.codecool.GamLib.model;
 
+import com.codecool.GamLib.services.JsonMapper;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -30,7 +31,7 @@ public class Platform {
     private List<Game> games;
 
     @Transient
-    private static final ObjectMapper mapper = new ObjectMapper();
+    private JsonMapper jsonMapper;
 
     public Platform(){
         super();
@@ -47,17 +48,12 @@ public class Platform {
         this.games = games;
     }
 
-    public String JSONrepresentation() {
-        String jsonOutput = "";
-        try {
-            jsonOutput = mapper.writeValueAsString(this);
-        } catch (JsonProcessingException e) {
-            e.printStackTrace();
-        }
-        return jsonOutput;
+    public String jsonRepresentation() {
+        return jsonMapper.jsonRepresentation(this);
     }
 
     public static Optional<Platform> buildFromJson(String json) {
+        ObjectMapper mapper = new ObjectMapper();
         try {
             return Optional.of(mapper.readValue(json, Platform.class));
         } catch (JsonProcessingException e) {

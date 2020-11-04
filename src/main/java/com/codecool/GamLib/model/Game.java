@@ -1,5 +1,6 @@
 package com.codecool.GamLib.model;
 
+import com.codecool.GamLib.services.JsonMapper;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -25,6 +26,9 @@ public class Game {
     private float rating;
     private String description;
 
+    @Transient
+    private JsonMapper jsonMapper;
+
     @ManyToOne
     private Studio studio;
 
@@ -47,15 +51,8 @@ public class Game {
         this.platforms = platforms;
     }
 
-    public String JSONrepresentation() {
-        ObjectMapper mapper = new ObjectMapper();
-        String jsonOutput = "";
-        try {
-            jsonOutput = mapper.writeValueAsString(this);
-        } catch (JsonProcessingException e) {
-            e.printStackTrace();
-        }
-        return jsonOutput;
+    public String jsonRepresentation() {
+        return jsonMapper.jsonRepresentation(this);
     }
 
     public Long getId() {
