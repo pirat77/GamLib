@@ -11,7 +11,7 @@ import java.util.Optional;
 
 @JsonIgnoreProperties(ignoreUnknown = true, value = {"games"})
 @Entity
-public class Platform {
+public class Platform extends GamLibModel {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -55,7 +55,7 @@ public class Platform {
         return Optional.empty();
     }
 
-    public void setId(long id) {
+    public void setId(Long id) {
         this.id = id;
     }
 

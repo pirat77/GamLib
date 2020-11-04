@@ -11,7 +11,7 @@ import java.util.List;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 @Entity(name = "game")
-public class Game {
+public class Game extends GamLibModel {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -46,6 +46,10 @@ public class Game {
         this.description = description;
         this.studio = studio;
         this.platforms = platforms;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public Long getId() {

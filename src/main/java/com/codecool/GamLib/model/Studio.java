@@ -9,7 +9,7 @@ import java.util.List;
 
 @JsonIgnoreProperties(ignoreUnknown = true, value = {"game"})
 @Entity(name = "studio")
-public class Studio {
+public class Studio extends GamLibModel {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -34,6 +34,10 @@ public class Studio {
         this.country = country;
         this.studioLogo = studioLogo;
         this.game = game;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public Long getId() {
