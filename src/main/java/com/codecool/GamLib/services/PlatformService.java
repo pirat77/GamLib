@@ -25,7 +25,7 @@ public class PlatformService {
     public String getById(long id) {
         Optional<Platform> optionalPlatform = platformRepository.findById(id);
         if (optionalPlatform.isEmpty()) return "{}";
-        else return optionalPlatform.get().jsonRepresentation();
+        else return jsonMapper.jsonRepresentation(optionalPlatform.get());
     }
 
     public Optional<Platform> add(String platformJson) {
@@ -58,6 +58,4 @@ public class PlatformService {
         platformRepository.save(platform);
         return platformRepository.count();
     }
-
-
 }

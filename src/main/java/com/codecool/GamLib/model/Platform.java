@@ -30,9 +30,6 @@ public class Platform {
     @ManyToMany
     private List<Game> games;
 
-    @Transient
-    private JsonMapper jsonMapper;
-
     public Platform(){
         super();
     }
@@ -46,10 +43,6 @@ public class Platform {
         this.internalStorage = internalStorage;
         this.platformLogo = platformLogo;
         this.games = games;
-    }
-
-    public String jsonRepresentation() {
-        return jsonMapper.jsonRepresentation(this);
     }
 
     public static Optional<Platform> buildFromJson(String json) {

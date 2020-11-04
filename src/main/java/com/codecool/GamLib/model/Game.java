@@ -26,9 +26,6 @@ public class Game {
     private float rating;
     private String description;
 
-    @Transient
-    private JsonMapper jsonMapper;
-
     @ManyToOne
     private Studio studio;
 
@@ -49,10 +46,6 @@ public class Game {
         this.description = description;
         this.studio = studio;
         this.platforms = platforms;
-    }
-
-    public String jsonRepresentation() {
-        return jsonMapper.jsonRepresentation(this);
     }
 
     public Long getId() {
