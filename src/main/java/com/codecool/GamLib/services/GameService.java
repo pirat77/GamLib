@@ -9,14 +9,12 @@ import org.springframework.stereotype.Service;
 public class GameService {
 
     @Autowired
+    private JsonMapper jsonMapper;
+
+    @Autowired
     private GameRepository gameRepository;
 
     public String getALLResponse(){
-        String output = "{\"games\": [";
-        for (Game g: gameRepository.findAll()){
-            output += (g.jsonRepresentation() + ", ");
-        }
-        output += "]}";
-        return output;
+        return jsonMapper.jsonRepresentation(gameRepository.findAll());
     }
 }
