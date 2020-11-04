@@ -1,9 +1,12 @@
 package com.codecool.GamLib.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import javax.persistence.*;
 import java.util.List;
+import java.util.Optional;
 
 @JsonIgnoreProperties(ignoreUnknown = true, value = {"games"})
 @Entity
@@ -26,6 +29,9 @@ public class Platform {
     @ManyToMany
     private List<Game> games;
 
+    @Transient
+    private static final ObjectMapper mapper = new ObjectMapper();
+
     public Platform(){
         super();
     }
@@ -39,6 +45,29 @@ public class Platform {
         this.internalStorage = internalStorage;
         this.platformLogo = platformLogo;
         this.games = games;
+    }
+
+    public String JSONrepresentation() {
+        String jsonOutput = "";
+        try {
+            jsonOutput = mapper.writeValueAsString(this);
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
+        return jsonOutput;
+    }
+
+    public static Optional<Platform> buildFromJson(String json) {
+        try {
+            return Optional.of(mapper.readValue(json, Platform.class));
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
+        return Optional.empty();
+    }
+
+    public void setId(long id) {
+        this.id = id;
     }
 
     public Long getId() {
