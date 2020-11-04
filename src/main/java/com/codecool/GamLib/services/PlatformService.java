@@ -5,21 +5,21 @@ import com.codecool.GamLib.repositories.PlatformRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
 public class PlatformService {
 
     @Autowired
+    private JsonMapper jsonMapper;
+
+    @Autowired
     private static PlatformRepository platformRepository;
 
     public String getALL(){
-        String output = "{\"platforms\": [";
-        for (Platform p : platformRepository.findAll()){
-            output += (p.jsonRepresentation() + ", ");
-        }
-        output += "]}";
-        return output;
+        List<Platform> allPlatforms = platformRepository.findAll();
+        return jsonMapper.jsonRepresentation(allPlatforms);
     }
 
     public String getById(long id) {
@@ -28,37 +28,35 @@ public class PlatformService {
         else return optionalPlatform.get().jsonRepresentation();
     }
 
-    public void add(String platformJson) {
-
+    public Optional<Platform> add(String platformJson) {
+        Optional<Platform> optionalPlatform = Platform.buildFromJson(platformJson);
+        if (optionalPlatform.isEmpty()) return optionalPlatform;
+        return Optional.of(platformRepository.save(optionalPlatform.get()));
     }
 
     public long deleteAll() {
-        long numberOfRows = platformRepository.count();
         platformRepository.deleteAll();
-        long rowsLeft = platformRepository.count();
-        return numberOfRows - rowsLeft;
+        return platformRepository.count();
     }
 
     public long deleteById(long id) {
-        long numberOfRows = platformRepository.count();
         platformRepository.deleteById(id);
-        long rowsLeft = platformRepository.count();
-        return numberOfRows - rowsLeft;
+        return platformRepository.count();
     }
 
     public long replaceAll(String jsonPlatformCollection) {
-        long affectedRows = deleteAll();
+        deleteAll();
         //todo get platforms from json and save them
-        return affectedRows;
+        return platformRepository.count();
     }
 
     public long replaceById(long id, String json) {
         Optional<Platform> optionalPlatform = Platform.buildFromJson(json);
-        if (optionalPlatform.isEmpty()) return 0L;
+        if (optionalPlatform.isEmpty()) return -1L;
         Platform platform = optionalPlatform.get();
         platform.setId(id);
         platformRepository.save(platform);
-        return 1L;
+        return platformRepository.count();
     }
 
 
