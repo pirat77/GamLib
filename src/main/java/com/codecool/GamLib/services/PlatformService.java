@@ -24,7 +24,8 @@ public class PlatformService {
 
     public String getById(long id) {
         Optional<Platform> optionalPlatform = platformRepository.findById(id);
-        if (optionalPlatform.isEmpty()) return "{
+        if (optionalPlatform.isEmpty()) return "{}";
+        else return optionalPlatform.get().JSONrepresentation();
     }
 
     public void add(String platformJson) {
