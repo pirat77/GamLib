@@ -6,6 +6,7 @@ import org.springframework.lang.NonNull;
 import org.springframework.lang.NonNullApi;
 import org.springframework.stereotype.Repository;
 
+import javax.persistence.Column;
 import java.util.List;
 
 @Repository
@@ -14,4 +15,7 @@ public interface PlatformRepository extends CrudRepository<Platform, Long> {
     @Override
     @NonNull
     List<Platform> findAll();
+
+    List<Platform> findByName();
+    List<Platform> findByCpuName();
 }
