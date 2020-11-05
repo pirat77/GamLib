@@ -1,6 +1,9 @@
 package com.codecool.GamLib.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
+
 import javax.persistence.*;
 import java.util.Date;
 import java.util.List;
@@ -20,6 +23,7 @@ public class Studio extends GamLibModel {
     private String studioLogo;
 
     @OneToMany(mappedBy = "studio", fetch = FetchType.LAZY)
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private List<Game> game;
 
     public Studio(){
