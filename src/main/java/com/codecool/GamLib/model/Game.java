@@ -26,7 +26,6 @@ public class Game extends GamLibModel {
     private float rating;
     private String description;
 
-
     @ManyToOne
     @JoinColumn(name="studio_id", referencedColumnName = "id")
     private Studio studio;
