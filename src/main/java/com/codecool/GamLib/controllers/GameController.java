@@ -14,7 +14,7 @@ public class GameController {
 
     @GetMapping(value = "/game")
     public String getGame(@RequestBody GameRequest request){
-        return service.getAll();
+        return "";
     }
 
     @DeleteMapping("/game")
