@@ -2,8 +2,10 @@ package com.codecool.GamLib;
 
 import com.codecool.GamLib.model.Game;
 import com.codecool.GamLib.model.Platform;
+import com.codecool.GamLib.model.Studio;
 import com.codecool.GamLib.repositories.GameRepository;
 import com.codecool.GamLib.repositories.PlatformRepository;
+import com.codecool.GamLib.repositories.StudioRepository;
 import com.codecool.GamLib.services.GamLibService;
 import org.springframework.beans.factory.BeanFactory;
 import org.springframework.beans.factory.ObjectProvider;
@@ -66,5 +68,10 @@ class ApplicationConfig {
         return new GamLibService<Game, GameRepository>(Game.class, beanProvider.getIfAvailable());
     }
 
+    @Bean
+    public GamLibService<Studio, StudioRepository> studioService(BeanFactory beanFactory) {
+        ObjectProvider<StudioRepository> beanProvider = beanFactory.getBeanProvider(StudioRepository.class);
+        return new GamLibService<Studio, StudioRepository>(Studio.class, beanProvider.getIfAvailable());
+    }
 
 }

@@ -10,10 +10,7 @@ import java.util.List;
 @Repository
 public interface GameRepository extends CrudRepository<Game, Long> {
 
-
-
     List<Game> findByStudio(String studio);
     List<Game> findByTitle(String title);
     List<Game> findByGenre(Genre genre);
-
 }
