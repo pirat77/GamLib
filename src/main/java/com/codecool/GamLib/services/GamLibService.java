@@ -126,14 +126,15 @@ public class GamLibService<T extends GamLibModel, S extends CrudRepository<T, Lo
     }
 
     private <U> List<T> getElementsFromMethod(Map<String, String> parameters, String methodPrefix, Method method) {
-        System.out.println("im here");
         String paramName = method.getName().substring(methodPrefix.length());
         String paramValue = parameters.get(paramName);
         if (paramValue == null) return Collections.emptyList();
         U parameterValue = castParameterFromGivenClass(paramValue, method);
         if (parameterValue == null) return Collections.emptyList();
         try {
-            List<T> resultList = (List<T>) method.invoke(repository, parameterValue);
+            Object returnedObject = method.invoke(repository, parameterValue);
+            returnedObject = insertObjectIntoListIfItIsOptional(returnedObject);
+            List<T> resultList = (List<T>) returnedObject;
             return resultList;
         } catch (IllegalAccessException | InvocationTargetException e) {
             e.printStackTrace();
@@ -141,11 +142,19 @@ public class GamLibService<T extends GamLibModel, S extends CrudRepository<T, Lo
         return Collections.emptyList();
     }
 
+    private <U> Object insertObjectIntoListIfItIsOptional(Object possiblyOptional) {
+        if (possiblyOptional instanceof Optional) {
+            if (((Optional) possiblyOptional).isPresent()) return List.of(((Optional) possiblyOptional).get());
+            else return Collections.emptyList();
+        }
+        return possiblyOptional;
+    }
+
     private <U> U castParameterFromGivenClass(String parameter, Method method) {
         U result;
         try {
-            Class<U> object = (Class<U>) method.getParameterTypes()[0];
-            result = (U) parameter;
+            Class<U> objectClass;
+            result = getCastedVariable(parameter, method);
             return result;
         } catch (Exception e) {
             e.printStackTrace();
@@ -153,12 +162,17 @@ public class GamLibService<T extends GamLibModel, S extends CrudRepository<T, Lo
         return null;
     }
 
+    private <U> U getCastedVariable(String parameter, Method method) {
+        if (method.getName().equals("findById")) return ((Class<U>) Long.class).cast(Long.valueOf(parameter));
+        else return ((Class<U>) method.getParameterTypes()[0]).cast(parameter);
+    }
+
     private void mergeCommonElements(Set<T> foundElements, List<T> nextElements) {
         if (foundElements.size() == 0) {
             foundElements.addAll(nextElements);
             return;
         }
-        foundElements.retainAll(nextElements);
+        foundElements.addAll(nextElements);
     }
 
 }
