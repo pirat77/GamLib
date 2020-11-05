@@ -1,5 +1,12 @@
 package com.codecool.GamLib;
 
+import com.codecool.GamLib.model.Game;
+import com.codecool.GamLib.model.Platform;
+import com.codecool.GamLib.repositories.GameRepository;
+import com.codecool.GamLib.repositories.PlatformRepository;
+import com.codecool.GamLib.services.GamLibService;
+import org.springframework.beans.factory.BeanFactory;
+import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
@@ -46,5 +53,18 @@ class ApplicationConfig {
         txManager.setEntityManagerFactory(entityManagerFactory);
         return txManager;
     }
+
+    @Bean
+    public GamLibService<Platform, PlatformRepository> platformService(BeanFactory beanFactory) {
+        ObjectProvider<PlatformRepository> beanProvider = beanFactory.getBeanProvider(PlatformRepository.class);
+        return new GamLibService<Platform, PlatformRepository>(beanProvider.getIfAvailable());
+    }
+
+    @Bean
+    public GamLibService<Game, GameRepository> gameService(BeanFactory beanFactory) {
+        ObjectProvider<GameRepository> beanProvider = beanFactory.getBeanProvider(GameRepository.class);
+        return new GamLibService<Game, GameRepository>(beanProvider.getIfAvailable());
+    }
+
 
 }
