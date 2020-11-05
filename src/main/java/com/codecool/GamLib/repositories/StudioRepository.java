@@ -8,6 +8,6 @@ import java.util.List;
 @Repository
 public interface StudioRepository extends CrudRepository<Studio, Long> {
 
-    List<Studio> findByName(String studio);
-    List<Studio> findByCountry(String title);
+    List<Studio> findByName(String name);
+    List<Studio> findByCountry(String country);
 }
