@@ -1,6 +1,8 @@
 package com.codecool.GamLib.controllers;
 
-import com.codecool.GamLib.services.GameService;
+import com.codecool.GamLib.model.Game;
+import com.codecool.GamLib.repositories.GameRepository;
+import com.codecool.GamLib.services.GamLibService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -8,28 +10,28 @@ import org.springframework.web.bind.annotation.*;
 public class GameController {
 
     @Autowired
-    private GameService gameService;
+    private GamLibService<Game, GameRepository> service;
 
-    @GetMapping(value = "/Game")
+    @GetMapping(value = "/game")
     public String getGame(@RequestBody GameRequest request){
-        return gameService.getALLResponse();
+        return service.getAll();
     }
 
-    @DeleteMapping("/Game")
+    @DeleteMapping("/game")
     public String deleteGame(@RequestBody GameRequest request){
         String output = "";
 
         return output;
     }
 
-    @PutMapping("/Game")
+    @PutMapping("/game")
     public String putGame(@RequestBody GameRequest request){
         String output = "";
 
         return output;
     }
 
-    @PostMapping(value = "/Game")
+    @PostMapping(value = "/game")
     public String postGame(@RequestBody GameRequest request){
         String output = "";
 
