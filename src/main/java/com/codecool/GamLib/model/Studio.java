@@ -1,8 +1,6 @@
 package com.codecool.GamLib.model;
 
-import com.codecool.GamLib.services.JsonMapper;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-
 import javax.persistence.*;
 import java.util.Date;
 import java.util.List;

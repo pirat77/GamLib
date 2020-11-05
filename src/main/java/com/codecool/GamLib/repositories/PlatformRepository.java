@@ -3,10 +3,7 @@ package com.codecool.GamLib.repositories;
 import com.codecool.GamLib.model.Platform;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.lang.NonNull;
-import org.springframework.lang.NonNullApi;
 import org.springframework.stereotype.Repository;
-
-import javax.persistence.Column;
 import java.util.List;
 
 @Repository

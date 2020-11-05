@@ -3,8 +3,6 @@ package com.codecool.GamLib.services;
 import com.codecool.GamLib.model.GamLibModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.repository.CrudRepository;
-import org.springframework.stereotype.Service;
-
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.*;
