@@ -24,19 +24,7 @@ public class StatusService {
                 "Unable to convert and add element", -1L, uriPath));
     }
 
-    public String statusAfterDeleteAll(String uriPath, long rows) {
-        if (rows == 0L) {
-            return jsonMapper.jsonRepresentation(createMessageToReturn(200, "delete", rows, uriPath));
-        }
-        return jsonMapper.jsonRepresentation(
-                createErrorToReturn(500, "delete", "There are records left", rows, uriPath));
-    }
-
-    public String statusDeleteById(String uriPath, long rows) {
-        if (rows == 0L) {
-            return jsonMapper.jsonRepresentation(
-                    createMessageToReturn(400, "delete", rows, uriPath));
-        }
+    public String statusAfterDelete(String uriPath, long rows) {
         if (rows == -1L) {
             return jsonMapper.jsonRepresentation(
                     createErrorToReturn(500, "delete",
@@ -46,7 +34,7 @@ public class StatusService {
                 createMessageToReturn(200, "delete", rows, uriPath));
     }
 
-    public String statusAfterReplaceAll(String uriPath, long rows) {
+    public String statusAfterReplace(String uriPath, long rows) {
         if (rows == 0L) {
             jsonMapper.jsonRepresentation(
                     createErrorToReturn(400, "replace",

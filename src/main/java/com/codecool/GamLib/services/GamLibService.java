@@ -5,7 +5,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Service;
 
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 public class GamLibService<T extends GamLibModel, S extends CrudRepository<T, Long>> {
@@ -21,17 +24,11 @@ public class GamLibService<T extends GamLibModel, S extends CrudRepository<T, Lo
         this.repository = repository;
     }
 
-    public String getAll(){
+    public String get(Map<String, String> parameters) {
         String output = "";
-        List<T> allElements = new ArrayList<>();
-        Iterable<T> elements = repository.findAll();
-        elements.forEach(allElements::add);
-        return jsonMapper.jsonRepresentation(elements);
-    }
-
-    public String getById(long id) {
-        Optional<T> optionalPlatform = repository.findById(id);
-        return jsonMapper.jsonRepresentation(optionalPlatform.get());
+        if (parameters.keySet().isEmpty()) output = getAll();
+        else output = getAllByParams(parameters);
+        return output;
     }
 
     public Optional<T> add(String jsonElement) {
@@ -40,21 +37,48 @@ public class GamLibService<T extends GamLibModel, S extends CrudRepository<T, Lo
         return Optional.of(repository.save(optional.get()));
     }
 
-    public long deleteAll() {
+    public long delete(Map<String, String> parameters) {
+        long output = 0;
+        if (parameters.keySet().isEmpty()) output = deleteAll();
+        else output = delete(parameters);
+        return output;
+    }
+
+    public long replace(Map<String, String> parameters, String jsonElementsList) {
+        long output = 0;
+        if (parameters.keySet().isEmpty()) output = replaceAll(jsonElementsList);
+        else output = replaceAllByParams(parameters, jsonElementsList);
+        return output;
+    }
+
+    private String getAll(){
+        List<T> allElements = new ArrayList<>();
+        Iterable<T> elements = repository.findAll();
+        elements.forEach(allElements::add);
+        return jsonMapper.jsonRepresentation(elements);
+    }
+
+    private String getAllByParams(Map<String, String> parameters) {
+        List<T> elements = findCommonElements(parameters);
+        return jsonMapper.jsonRepresentation(elements);
+    }
+
+    private long deleteAll() {
         repository.deleteAll();
         return repository.count();
     }
 
-    public Long deleteById(long id) {
-        if (!repository.existsById(id)) return 0L;
+    private long deleteAllByParams(Map<String, String> parameters) {
+        List<T> elements = findCommonElements(parameters);
+        if (elements.isEmpty()) return 0L;
         long before = repository.count();
-        repository.deleteById(id);
+        repository.deleteAll(elements);
         long after = repository.count();
-        if (before - after != 1L) return -1L;
+        if (before - after != elements.size()) return -1L;
         return after;
     }
 
-    public long replaceAll(String jsonElementsList) {
+    private long replaceAll(String jsonElementsList) {
         List<T> elements = jsonMapper.getListOfObjectsFromJson(jsonElementsList, tClass);
         if (elements.isEmpty()) return 0L;
 
@@ -69,13 +93,70 @@ public class GamLibService<T extends GamLibModel, S extends CrudRepository<T, Lo
         return currentNumberOfRows;
     }
 
-    public long replaceById(long id, String jsonElement) {
-        Optional<T> optionalElement = jsonMapper.getObjectFromJson(jsonElement, tClass);
-        if (optionalElement.isEmpty()) return -1L;
-        T element = optionalElement.get();
-        element.setId(id);
-        repository.save(element);
-        return repository.count();
+    private long replaceAllByParams(Map<String, String> parameters, String jsonElementsList) {
+        List<T> newElements = jsonMapper.getListOfObjectsFromJson(jsonElementsList, tClass);
+        List<T> foundElements = findCommonElements(parameters);
+        if (newElements.isEmpty() || foundElements.isEmpty()) return -1L;
+
+        long before = repository.count();
+        repository.deleteAll(foundElements);
+        long after = repository.count();
+        if (before - after != foundElements.size()) return -1L;
+
+        before = after;
+        repository.saveAll(newElements);
+        after = repository.count();
+        if (after - before != newElements.size()) return -1L;
+
+        return after;
+    }
+
+    private <U> List<T> findCommonElements(Map<String, String> parameters) {
+        String methodPrefix = "findBy";
+        List<Method> findByMethods = Arrays.stream(tClass.getMethods())
+                .filter(method -> method.getName().startsWith(methodPrefix))
+                .collect(Collectors.toList());
+        Set<T> foundElements = new HashSet<>();
+        for(Method method : findByMethods) {
+            List<T> nextElements = getElementsFromMethod(parameters, methodPrefix, method);
+            mergeCommonElements(foundElements, nextElements);
+        }
+        return new ArrayList<>(foundElements);
+    }
+
+    private <U> List<T> getElementsFromMethod(Map<String, String> parameters, String methodPrefix, Method method) {
+        String paramName = method.getName().substring(methodPrefix.length());
+        String paramValue = parameters.get(paramName);
+        if (paramValue == null) return Collections.emptyList();
+        U parameterValue = castParameterFromGivenClass(paramValue, method);
+        if (parameterValue == null) return Collections.emptyList();
+        try {
+            List<T> resultList = (List<T>) method.invoke(repository, parameterValue);
+            return resultList;
+        } catch (IllegalAccessException | InvocationTargetException e) {
+            e.printStackTrace();
+        }
+        return Collections.emptyList();
+    }
+
+    private <U> U castParameterFromGivenClass(String parameter, Method method) {
+        U result;
+        try {
+            Class<U> object = (Class<U>) method.getParameterTypes()[0];
+            result = (U) parameter;
+            return result;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    private void mergeCommonElements(Set<T> foundElements, List<T> nextElements) {
+        if (foundElements.size() == 0) {
+            foundElements.addAll(nextElements);
+            return;
+        }
+        foundElements.retainAll(nextElements);
     }
 
 }

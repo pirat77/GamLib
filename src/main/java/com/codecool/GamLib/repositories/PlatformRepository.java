@@ -16,6 +16,6 @@ public interface PlatformRepository extends CrudRepository<Platform, Long> {
     @NonNull
     List<Platform> findAll();
 
-    List<Platform> findByName();
-    List<Platform> findByCpuName();
+    List<Platform> findByName(String name);
+    List<Platform> findByCpuName(String cpuName);
 }
