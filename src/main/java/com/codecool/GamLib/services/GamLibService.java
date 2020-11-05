@@ -20,7 +20,8 @@ public class GamLibService<T extends GamLibModel, S extends CrudRepository<T, Lo
 
     public GamLibService() {}
 
-    public GamLibService(S repository) {
+    public GamLibService(Class<T> tClass, S repository) {
+        this.tClass = tClass;
         this.repository = repository;
     }
 
@@ -40,7 +41,7 @@ public class GamLibService<T extends GamLibModel, S extends CrudRepository<T, Lo
     public long delete(Map<String, String> parameters) {
         long output = 0;
         if (parameters.keySet().isEmpty()) output = deleteAll();
-        else output = delete(parameters);
+        else output = deleteAllByParams(parameters);
         return output;
     }
 
@@ -113,7 +114,7 @@ public class GamLibService<T extends GamLibModel, S extends CrudRepository<T, Lo
 
     private <U> List<T> findCommonElements(Map<String, String> parameters) {
         String methodPrefix = "findBy";
-        List<Method> findByMethods = Arrays.stream(tClass.getMethods())
+        List<Method> findByMethods = Arrays.stream(repository.getClass().getMethods())
                 .filter(method -> method.getName().startsWith(methodPrefix))
                 .collect(Collectors.toList());
         Set<T> foundElements = new HashSet<>();
@@ -125,6 +126,7 @@ public class GamLibService<T extends GamLibModel, S extends CrudRepository<T, Lo
     }
 
     private <U> List<T> getElementsFromMethod(Map<String, String> parameters, String methodPrefix, Method method) {
+        System.out.println("im here");
         String paramName = method.getName().substring(methodPrefix.length());
         String paramValue = parameters.get(paramName);
         if (paramValue == null) return Collections.emptyList();

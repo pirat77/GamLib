@@ -57,13 +57,13 @@ class ApplicationConfig {
     @Bean
     public GamLibService<Platform, PlatformRepository> platformService(BeanFactory beanFactory) {
         ObjectProvider<PlatformRepository> beanProvider = beanFactory.getBeanProvider(PlatformRepository.class);
-        return new GamLibService<Platform, PlatformRepository>(beanProvider.getIfAvailable());
+        return new GamLibService<Platform, PlatformRepository>(Platform.class, beanProvider.getIfAvailable());
     }
 
     @Bean
     public GamLibService<Game, GameRepository> gameService(BeanFactory beanFactory) {
         ObjectProvider<GameRepository> beanProvider = beanFactory.getBeanProvider(GameRepository.class);
-        return new GamLibService<Game, GameRepository>(beanProvider.getIfAvailable());
+        return new GamLibService<Game, GameRepository>(Game.class, beanProvider.getIfAvailable());
     }
 
 
