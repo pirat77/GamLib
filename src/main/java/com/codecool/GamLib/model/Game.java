@@ -19,7 +19,7 @@ public class Game extends GamLibModel {
     private String title;
     @Column(name = "released_date")
     private Date releasedDate;
-    @Enumerated
+    @Enumerated(EnumType.STRING)
     private Genre genre;
     @Column(name = "game_logo")
     private String gameLogo;
@@ -27,6 +27,7 @@ public class Game extends GamLibModel {
     private String description;
 
     @ManyToOne
+    @JoinColumn(name="studio_id", referencedColumnName = "id")
     private Studio studio;
 
     @ManyToMany

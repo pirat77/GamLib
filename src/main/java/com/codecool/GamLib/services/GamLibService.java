@@ -10,7 +10,7 @@ import java.lang.reflect.Method;
 import java.util.*;
 import java.util.stream.Collectors;
 
-@Service
+
 public class GamLibService<T extends GamLibModel, S extends CrudRepository<T, Long>> {
 
     @Autowired
