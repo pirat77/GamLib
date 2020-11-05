@@ -118,24 +118,28 @@ public class GamLibService<T extends GamLibModel, S extends CrudRepository<T, Lo
                 .filter(method -> method.getName().startsWith(methodPrefix))
                 .collect(Collectors.toList());
         Set<T> foundElements = new HashSet<>();
-        for(Method method : findByMethods) {
-            List<T> nextElements = getElementsFromMethod(parameters, methodPrefix, method);
-            mergeCommonElements(foundElements, nextElements);
+        boolean firstIteration = true;
+        for(String paramName : parameters.keySet()) {
+            Optional<Method> methodOptional = findByMethods.stream()
+                    .filter(m -> m.getName().equals(String.format("%s%s", methodPrefix, paramName)))
+                    .findFirst();
+            if (methodOptional.isEmpty()) continue;
+            String paramValue = parameters.get(paramName);
+            List<T> nextElements = getElementsFromMethod(paramValue, methodOptional.get());
+            if (firstIteration) foundElements.addAll(nextElements);
+            else foundElements.retainAll(nextElements);
+            firstIteration = false;
         }
         return new ArrayList<>(foundElements);
     }
 
-    private <U> List<T> getElementsFromMethod(Map<String, String> parameters, String methodPrefix, Method method) {
-        String paramName = method.getName().substring(methodPrefix.length());
-        String paramValue = parameters.get(paramName);
-        if (paramValue == null) return Collections.emptyList();
+    private <U> List<T> getElementsFromMethod(String paramValue, Method method) {
         U parameterValue = castParameterFromGivenClass(paramValue, method);
         if (parameterValue == null) return Collections.emptyList();
         try {
             Object returnedObject = method.invoke(repository, parameterValue);
             returnedObject = insertObjectIntoListIfItIsOptional(returnedObject);
-            List<T> resultList = (List<T>) returnedObject;
-            return resultList;
+            return (List<T>) returnedObject;
         } catch (IllegalAccessException | InvocationTargetException e) {
             e.printStackTrace();
         }
@@ -151,28 +155,13 @@ public class GamLibService<T extends GamLibModel, S extends CrudRepository<T, Lo
     }
 
     private <U> U castParameterFromGivenClass(String parameter, Method method) {
-        U result;
         try {
-            Class<U> objectClass;
-            result = getCastedVariable(parameter, method);
-            return result;
+            if (method.getName().equals("findById")) return ((Class<U>) Long.class).cast(Long.valueOf(parameter));
+            else return ((Class<U>) method.getParameterTypes()[0]).cast(parameter);
         } catch (Exception e) {
             e.printStackTrace();
         }
         return null;
-    }
-
-    private <U> U getCastedVariable(String parameter, Method method) {
-        if (method.getName().equals("findById")) return ((Class<U>) Long.class).cast(Long.valueOf(parameter));
-        else return ((Class<U>) method.getParameterTypes()[0]).cast(parameter);
-    }
-
-    private void mergeCommonElements(Set<T> foundElements, List<T> nextElements) {
-        if (foundElements.size() == 0) {
-            foundElements.addAll(nextElements);
-            return;
-        }
-        foundElements.addAll(nextElements);
     }
 
 }
