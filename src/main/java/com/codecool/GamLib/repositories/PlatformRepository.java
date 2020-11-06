@@ -1,7 +1,6 @@
 package com.codecool.GamLib.repositories;
 
 import com.codecool.GamLib.model.Platform;
-import com.codecool.GamLib.model.Studio;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Repository;
