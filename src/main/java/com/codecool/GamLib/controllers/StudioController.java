@@ -6,7 +6,6 @@ import com.codecool.GamLib.services.GamLibService;
 import com.codecool.GamLib.services.StatusService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.Map;
 
 @RestController
