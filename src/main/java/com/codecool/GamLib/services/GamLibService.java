@@ -1,13 +1,13 @@
 package com.codecool.GamLib.services;
 
 import com.codecool.GamLib.model.GamLibModel;
+import com.codecool.GamLib.model.Genre;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.repository.CrudRepository;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.*;
 import java.util.stream.Collectors;
-
 
 public class GamLibService<T extends GamLibModel, S extends CrudRepository<T, Long>> {
 
@@ -132,7 +132,10 @@ public class GamLibService<T extends GamLibModel, S extends CrudRepository<T, Lo
     }
 
     private <U> List<T> getElementsFromMethod(String paramValue, Method method) {
-        U parameterValue = castParameterFromGivenClass(paramValue, method);
+        U parameterValue;
+        if (Arrays.stream(method.getGenericParameterTypes()).findAny().get().equals(Genre.class))
+            parameterValue = castParameterFromGivenClass(Genre.valueOf(paramValue), method);
+        else parameterValue = castParameterFromGivenClass(paramValue, method);
         if (parameterValue == null) return Collections.emptyList();
         try {
             Object returnedObject = method.invoke(repository, parameterValue);
@@ -152,6 +155,15 @@ public class GamLibService<T extends GamLibModel, S extends CrudRepository<T, Lo
         return possiblyOptional;
     }
 
+    private <U> U castParameterFromGivenClass(Genre parameter, Method method) {
+        try {
+            return ((Class<U>) method.getParameterTypes()[0]).cast(parameter);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
     private <U> U castParameterFromGivenClass(String parameter, Method method) {
         try {
             if (method.getName().equals("findById")) return ((Class<U>) Long.class).cast(Long.valueOf(parameter));
@@ -161,5 +173,4 @@ public class GamLibService<T extends GamLibModel, S extends CrudRepository<T, Lo
         }
         return null;
     }
-
 }
