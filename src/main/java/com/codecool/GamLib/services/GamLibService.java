@@ -135,6 +135,8 @@ public class GamLibService<T extends GamLibModel, S extends CrudRepository<T, Lo
         U parameterValue;
         if (Arrays.stream(method.getGenericParameterTypes()).findAny().get().equals(Genre.class))
             parameterValue = castParameterFromGivenClass(Genre.valueOf(paramValue), method);
+        else if (Arrays.stream(method.getGenericParameterTypes()).findAny().get().equals(Long.class))
+            parameterValue = castParameterFromGivenClass(Long.valueOf(paramValue), method);
         else parameterValue = castParameterFromGivenClass(paramValue, method);
         if (parameterValue == null) return Collections.emptyList();
         try {
@@ -164,10 +166,18 @@ public class GamLibService<T extends GamLibModel, S extends CrudRepository<T, Lo
         return null;
     }
 
+    private <U> U castParameterFromGivenClass(Long parameter, Method method) {
+        try {
+            return ((Class<U>) Long.class).cast(Long.valueOf(parameter));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
     private <U> U castParameterFromGivenClass(String parameter, Method method) {
         try {
-            if (method.getName().equals("findById")) return ((Class<U>) Long.class).cast(Long.valueOf(parameter));
-            else return ((Class<U>) method.getParameterTypes()[0]).cast(parameter);
+            return ((Class<U>) method.getParameterTypes()[0]).cast(parameter);
         } catch (Exception e) {
             e.printStackTrace();
         }
